@@ -1,0 +1,108 @@
+<!-- 고급웹프로그래밍, 과제#final, 서장호, 60192346 -->
+{% extends 'twit.html' %}
+
+{% block content %}
+<div class="detail-container">
+  <div class="post-container">
+    <div class="profile-twit detail-content">
+      <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
+      <input type="hidden" value="{{twit.id}}" class="twit-id">
+      <div class="twit-author author-detail">{{twit.User.nick}}</div>
+      <!-- 로그인한 사용자가 작성자가 아닐 경우 팔로우 버튼 표시 -->
+      {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
+      <span class="twit-follow">follow</span>
+      {% endif %}
+      <!-- 로그인한 사용자가 작성자일 경우 삭제 및 수정 버튼 표시 -->
+      {% if user and twit.User.id === user.id %}
+      <button class="twit-delete">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
+      <button class="twit-edit" onclick="location.href='/post/{{twit.id}}/edit';">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </button>
+      {% endif %}
+      <div class="twit-content content-detail">{{twit.content}}</div>
+      <!-- 게시물에 이미지가 있을 경우 이미지 표시 -->
+      {% if twit.img %}
+      <div class="img-detail"><img class="img-detail-src" src="{{twit.img}}" alt="섬네일"></div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="comment-container">
+    <div class="new-comment">
+      <form id="comment-form" action="/post/{{twit.id}}/comment" method="post" enctype="multipart/form-data">
+        <div class="login-group">
+          <textarea id="comment-textarea" name="content" maxlength="120"></textarea>
+          <button id="comment-btn" type="submit" class="btn btn-fill btn-info">
+            <i class="fa fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="comments">
+      <h5 style="margin: 0 0 5px 0;">comments</h5>
+      <!-- 댓글 목록 표시 -->
+      {% for comment in comments %}
+      <div class="comment-list">
+        <hr style="color: #bcc5c8; margin: 15px 0;">
+        <input type="hidden" value="{{comment.User.id}}" class="comment-user-id">
+        <input type="hidden" value="{{comment.id}}" class="comment-id">
+        <div class="twit-author comment-author">{{comment.User.nick}}</div>
+        <!-- 로그인한 사용자가 댓글 작성자가 아닐 경우 팔로우 버튼 표시 -->
+        {% if not followerIdList.includes(comment.User.id) and comment.User.id !== user.id %}
+        <span class="twit-follow">follow</span>
+        {% endif %}
+        <div class="comment-content">{{comment.content}}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    // 팔로우 버튼 클릭 이벤트
+    document.querySelectorAll('.twit-follow').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+            const myId = document.querySelector('#my-id');
+            if (myId) {
+                const userId = tag.parentNode.querySelector('.comment-user-id').value;
+                if (userId !== myId.value) {
+                    if (confirm('팔로잉하시나요?')) {
+                        axios.post(`/user/${userId}/follow`)
+                            .then(() => {
+                                location.reload(); // 팔로우 후 페이지 새로고침
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                            });
+                    }
+                }
+            }
+        });
+    });
+
+    // 게시물 삭제 버튼 클릭 이벤트
+    document.querySelectorAll('.twit-delete').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+            const myId = document.querySelector('#my-id');
+            if (myId) {
+                const userId = tag.parentNode.querySelector('.twit-user-id').value;
+                const twitId = tag.parentNode.querySelector('.twit-id').value;
+                if (userId === myId.value) {
+                    if (confirm('게시물을 정말 삭제하시나요?')) {
+                        axios.delete(`/post/${twitId}`)
+                        .then(() => {
+                            window.location = document.referrer; // 삭제 후 이전 페이지로 이동
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

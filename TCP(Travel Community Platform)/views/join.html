@@ -1,0 +1,56 @@
+<!-- 고급웹프로그래밍, 과제#final, 서장호, 60192346 -->
+{% extends 'layout.html' %}
+
+{% block content %}
+  <div class="timeline join-timeline">
+    <!-- 회원가입 제목 -->
+    <h3 style="text-align: center;">회원가입</h3>
+    <!-- 회원가입 폼 -->
+    <form id="join-form" action="/auth/join" method="post">
+      <table class="join-tb">
+        <tbody>
+          <!-- 이메일 입력란 -->
+          <tr class="join-tb-tr">
+            <td class="join-tb-td">
+                <label for="join-email">email</label>
+            </td>
+            <td>
+              <input id="join-email" class="join-control" type="email" name="email">
+            </td>
+          </tr>
+          <!-- 닉네임 입력란 -->
+          <tr class="join-tb-tr">
+            <td>
+              <label for="join-nick">nickname</label>
+            </td>
+            <td>
+              <input id="join-nick" class="join-control" name="nick">
+            </td>
+          </tr>
+          <!-- 비밀번호 입력란 -->
+          <tr class="join-tb-tr">
+            <td>
+              <label for="join-password">password</label>
+            </td>
+            <td>
+              <input id="join-password" class="join-control" type="password" name="password">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- 회원가입 버튼 -->
+      <button id="join-btn" type="submit" class="btn btn-fill">JOIN</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    // 페이지 로드 시 URL에 'error' 파라미터가 있으면 경고창 표시
+    window.onload = () => {
+      if (new URL(location.href).searchParams.get('error')) {
+        alert('이미 존재하는 이메일입니다.');
+      }
+    };
+  </script>
+{% endblock %}

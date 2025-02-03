@@ -1,0 +1,145 @@
+<!-- 고급웹프로그래밍, 과제#final, 서장호, 60192346 -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <!-- 공통 head 부분을 포함 -->
+    {% include "partials/head.html" %}
+
+    <!-- 카카오톡 SDK 및 공유 기능 스크립트 -->
+    <script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script type="text/javascript">
+      function shareKakaotalk(postId, userNick) {
+          Kakao.init("ead3aaab226fd82be7d5f3db0b0abeea"); // 사용할 앱의 JavaScript 키를 설정
+          Kakao.Link.sendDefault({
+                objectType: "feed",
+                content: {
+                    title: userNick + '님의 게시글', // 콘텐츠의 타이틀
+                    imageUrl: "https://ifh.cc/g/mVnD7j.png", // 썸네일 이미지
+                    link: {
+                        mobileWebUrl: "http://localhost:8001" + "/post/" + postId, // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                        webUrl: "http://localhost:8001" + "/post/" + postId // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                    }
+                },
+                buttons: [
+                  {
+                    title: "게시글 확인", // 버튼 제목
+                    link: {
+                        mobileWebUrl: "http://localhost:8001" + "/post/" + postId, // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                        webUrl: "http://localhost:8001" + "/post/" + postId // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                    }
+                  }
+                ]
+          });
+      }
+  </script>
+  </head>
+  <body>
+    <!-- 공통 네비게이션 바 포함 -->
+    {% include "partials/navbar.html" %}
+    
+    <div class="container">
+      <div class="profile-wrap">
+        <div class="profile">
+          <!-- 로그인 상태 확인 -->
+          {% if user and user.id %}
+            <div class="user-name">{{'반갑습니다. ' +  user.nick + '님'}}</div>
+            <div class="half">
+              <div>팔로잉</div>
+              <div class="count following-count">{{followingCount}}</div>
+            </div>
+            <div class="half">
+              <div>팔로워</div>
+              <div class="count follower-count">{{followerCount}}</div>
+            </div>
+            <input id="my-id" type="hidden" value="{{user.id}}">
+            <a id="my-profile" href="/profile" class="btn">내 프로필</a>
+            <a id="logout" href="/auth/logout" class="btn">로그아웃</a>
+          <!-- 비로그인 상태 -->
+          {% else %}
+          <form id="login-form" action="/auth/login" method="post">
+            <div class="login-group">
+              <label for="email">이메일</label>
+              <input id="email" class="form-control" type="email" name="email" required autofocus>
+            </div>
+            <div class="login-group">
+              <label for="password">비밀번호</label>
+              <input id="password" class="form-control" type="password" name="password" required>
+            </div>
+            <button id="login" type="submit" class="btn btn-info">로그인</button>
+            <a id="join" href="/join" class="btn btn-fill btn-info">회원가입</a>
+            <a id="kakao" href="/auth/kakao" class="btn btn-fill btn-warning">카카오톡 로그인</a>
+          </form>
+          {% endif %}
+        </div>
+        <!-- 로그인 상태일 때 추천 사용자 목록 표시 -->
+        {% if user and user.id %}
+        <div class="suggestion">
+          <div class="user-name">{{user.nick + '님을 위한 추천 이웃'}}</div>
+          {% for suggestion in suggestions %}
+          {% if not followerIdList.includes(suggestion.id) and suggestion.id !== user.id %}
+          <div class="suggested">
+            <input type="hidden" value="{{suggestion.id}}" class="suggestion-id">
+            <div class="suggested-user">
+              <div class="suggested-name">{{suggestion.nick}}</div>
+              <div class="suggested-info">
+                {{suggestion.createdAt.toString().split(' ')[1]}} 
+                {{suggestion.createdAt.toString().split(' ')[2]}} 
+                {{suggestion.createdAt.toString().split(' ')[3]}} 가입
+              </div>
+            </div>
+            <div class="suggested-follow">follow</div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <!-- 콘텐츠를 삽입할 블록 -->
+      {% block content %}
+      {% endblock %}
+    </div>
+    <!-- JavaScript 파일 및 라이브러리 포함 -->
+    <script src="/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/bootstrap.js" type="text/javascript"></script>
+    <script>
+      // 로그인 에러가 있을 경우 경고창 표시
+      window.onload = () => {
+        if (new URL(location.href).searchParams.get('loginError')) {
+          alert(new URL(location.href).searchParams.get('loginError'));
+        }
+      };
+    </script>
+    <script>
+      // 추천 사용자 팔로우 버튼 클릭 이벤트
+      document.querySelectorAll('.suggested-follow').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+          const myId = document.querySelector('#my-id');
+          if (myId) {
+            const userId = tag.parentNode.querySelector('.suggestion-id').value;
+            if (userId !== myId.value) {
+              if (confirm('팔로잉하시나요?')) {
+                axios.post(`/user/${userId}/follow`)
+                  .then(() => {
+                    location.reload();
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+              }
+            }
+          }
+        })
+      });
+    </script>
+    <!-- 추가 스크립트를 삽입할 블록 -->
+    {% block script %}
+    {% endblock %}
+    <footer>
+      <p>&copy; 2024 Travel Community Platform</p>
+    </footer>
+  </body>
+</html>

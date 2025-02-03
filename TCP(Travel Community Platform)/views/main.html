@@ -1,0 +1,166 @@
+<!-- 고급웹프로그래밍, 과제#final, 서장호, 60192346 -->
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="timeline">
+  <!-- 사용자 로그인 상태 확인 -->
+  {% if user %}
+  <div>
+    <!-- 게시물 작성 폼 -->
+    <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
+      <div class="login-group">
+        <textarea id="twit" name="content" maxlength="140" placeholder="안녕하세요! 여행 커뮤니티 플랫폼(TCP)입니다. 여행 후기 작성, 게시글 공유, 댓글 및 좋아요, 해시태그 검색, 팔로우 기능을 통해 여행 정보를 나누고 소통해보세요!"></textarea>
+      </div>
+      <div class="img-preview">
+        <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
+        <input id="img-url" type="hidden" name="url">
+      </div>
+      <div>
+        <!-- 사진 업로드 버튼 -->
+        <label id="img-label" for="img" class="btn btn-info">사진 업로드</label>
+        <input id="img" type="file" accept="image/*">
+        <button id="twit-btn" type="submit" class="btn btn-fill btn-info">
+          <i class="fa fa-paper-plane"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+  <div class="twits">
+    <!-- 게시물 검색 폼 -->
+    <form id="search-form" action="/search">
+      <input type="text" name="search" placeholder="원하는 여행지를 #태그로 검색">
+      <button class="btn btn-fill">검색</button>
+    </form>
+    <!-- 게시물 목록 -->
+    {% for twit in twits %}
+    <div class="twit">
+      <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
+      <input type="hidden" value="{{twit.id}}" class="twit-id">
+      <div class="twit-author">{{twit.User.nick}}</div>
+      <!-- 로그인 사용자와 게시물 작성자가 다르고, 팔로우하지 않은 경우 팔로우 버튼 표시 -->
+      {% if user and not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
+      <span class="twit-follow">follow</span>
+      {% endif %}
+      <!-- 로그인 사용자와 게시물 작성자가 다르고, 팔로우한 경우 언팔로우 버튼 표시 -->
+      {% if user and followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
+      <span class="twit-unfollow">unfollow</span>
+      {% endif %}
+      <div onclick="location.href='/post/{{twit.id}}';">
+      <div class="twit-content">{{twit.content}}</div>
+      <!-- 게시물에 이미지가 있을 경우 이미지 표시 -->
+      {% if twit.img %}
+      <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
+      {% endif %}
+      </div>
+      <!-- 좋아요 버튼 표시 -->
+      {% if not likerIdList.includes(twit.id)  %}
+      <button class="twit-like">🤍</button>
+      {% elif likerIdList.includes(twit.id)  %}
+      <button class="twit-unlike">❤️</button>
+      {% endif %}
+      <!-- 카카오톡 공유 버튼 -->
+      <input class="twit-share" type="image" onClick="shareKakaotalk('{{twit.id}}', '{{twit.User.nick}}');" src="/share.png" />
+    </div>
+    {% endfor %}
+  </div>
+  </div>
+  {% endblock %}
+
+{% block script %}
+<script>
+  // 이미지 파일 선택 시 미리보기 설정
+  if (document.getElementById('img')) {
+    document.getElementById('img').addEventListener('change', function (e) {
+      const formData = new FormData();
+      console.log(this, this.files);
+      formData.append('img', this.files[0]);
+      axios.post('/post/img', formData)
+        .then((res) => {
+          document.getElementById('img-url').value = res.data.url;
+          document.getElementById('img-preview').src = res.data.url;
+          document.getElementById('img-preview').style.display = 'inline';
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    });
+  }
+
+  // 팔로우 버튼 클릭 시 팔로우 요청
+  document.querySelectorAll('.twit-follow').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const userId = tag.parentNode.querySelector('.twit-user-id').value;
+        if (userId !== myId.value) {
+          if (confirm('팔로잉하시나요?')) {
+            axios.post(`/user/${userId}/follow`)
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+      }
+    });
+  });
+
+  // 언팔로우 버튼 클릭 시 언팔로우 요청
+  document.querySelectorAll('.twit-unfollow').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const userId = tag.parentNode.querySelector('.twit-user-id').value;
+        if (userId !== myId.value) {
+          if (confirm('팔로잉을 취소하시나요?')) {
+            axios.delete(`/user/${userId}/follow`)
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+      }
+    });
+  });
+
+  // 좋아요 버튼 클릭 시 좋아요 요청
+  document.querySelectorAll('.twit-like').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value;
+        axios.post(`/post/${twitId}/like`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
+  });
+
+  // 좋아요 취소 버튼 클릭 시 좋아요 취소 요청
+  document.querySelectorAll('.twit-unlike').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value;
+        axios.delete(`/post/${twitId}/like`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
+  });
+</script>
+{% endblock %}

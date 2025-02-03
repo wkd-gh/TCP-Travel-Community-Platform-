@@ -1,0 +1,11 @@
+<!-- 고급웹프로그래밍, 과제#final, 서장호, 60192346 -->
+{% extends 'layout.html' %}
+
+{% block content %}
+  <!-- 에러 메시지를 표시하는 블록 -->
+  <h1>{{message}}</h1>
+  <!-- 에러 상태 코드를 표시하는 블록 -->
+  <h2>{{error.status}}</h2>
+  <!-- 에러 스택 트레이스를 표시하는 블록 -->
+  <pre>{{error.stack}}</pre>
+{% endblock %}

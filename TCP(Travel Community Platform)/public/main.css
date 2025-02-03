@@ -1,0 +1,714 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333333;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0 20px;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 25px;
+  background: #6200ea;
+  border: none;
+  color: white;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: #3700b3;
+}
+
+input[type='text'], input[type='email'], input[type='password'], textarea {
+  border-radius: 5px;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  font-size: 16px;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+input[type='text'] {
+  border: 2px solid #6200ea;
+}
+
+.container {
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 60px;
+}
+
+@media screen and (min-width: 800px) {
+  .container {
+    width: 800px;
+    margin: 0 auto;
+  }
+}
+
+#login-form {
+  margin-bottom: 20px;
+}
+
+.login-group {
+  margin: 10px 0;
+}
+
+.login-group label {
+  width: 100%;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333333;
+}
+
+.half {
+  width: 48%;
+  margin: 10px 1%;
+  float: left;
+}
+
+.profile-wrap {
+  width: 100%;
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px 0;
+}
+
+@media screen and (min-width: 800px) {
+  .profile-wrap {
+    width: 320px;
+    margin-bottom: 0;
+  }
+}
+
+.profile {
+  text-align: left;
+  padding: 20px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 22px;
+  color: #333333;
+}
+
+.count {
+  font-weight: bold;
+  color: #6200ea;
+  font-size: 18px;
+}
+
+.timeline {
+  margin-top: 10px;
+  width: 100%;
+  display: inline-block;
+  border-radius: 10px;
+  vertical-align: top;
+}
+
+@media screen and (min-width: 800px) {
+  .timeline {
+    width: 650px;
+  }
+}
+
+#twit-form {
+  border-top: 2px solid #6200ea;
+  border-bottom: 2px solid #6200ea;
+  padding: 20px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.img-preview-wrap {
+  padding: 20px 0;
+}
+
+#img-preview {
+  max-width: 100%;
+}
+
+#img-label {
+  float: left;
+  color: #6200ea;
+}
+
+#img, #img-dlt {
+  display: none;
+}
+
+#twit {
+  width: 100%;
+  min-height: 72px;
+  background-color: #ffffff;
+  color: #333333;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#twit-btn {
+  float: right;
+}
+
+.twit {
+  border: 0;
+  border-left: 4px solid #6200ea;
+  padding: 20px;
+  position: relative;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.twit-content {
+  margin: 12px 0;
+  color: #333333;
+}
+
+.twit-author {
+  display: inline-block;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #6200ea;
+}
+
+.twit-follow, .twit-unfollow {
+  cursor: pointer;
+  border-radius: 15px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.7em;
+  text-transform: uppercase;
+  display: inline-block;
+  background-color: #6200ea;
+  padding: 5px 10px;
+}
+
+.twit-like, .twit-unlike, .twit-share {
+  background-color: transparent;
+  border: 0;
+  color: #6200ea;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.twit-share {
+  height: 20px;
+}
+
+.twit-edit {
+  margin-right: 15px;
+}
+
+.twit-delete, .twit-edit {
+  float: right;
+  font-size: 18px;
+  padding-top: 5px;
+  border: none;
+  background-color: transparent;
+  font-weight: 500;
+  color: #333333;
+}
+
+.twit-delete:hover, .twit-edit:hover {
+  color: #6200ea;
+}
+
+.twit-img {
+  text-align: center;
+}
+
+.twit-img img {
+  max-width: 100%;
+}
+
+.error-message {
+  color: #b00020;
+  font-weight: bold;
+}
+
+#search-form {
+  text-align: right;
+  padding: 10px 0;
+}
+
+#join-form {
+  padding: 10px;
+  text-align: center;
+}
+
+#hashtag-form {
+  text-align: right;
+}
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background-color: #331e52a2;
+  color: white;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.list-unstyled {
+  text-align: center;
+}
+
+.twit-container {
+  display: flex;
+}
+
+.detail-container {
+  margin: 25px auto;
+  width: 700px;
+}
+
+.detail-content, .new-comment {
+  border-top: 2px solid #6200ea;
+  border-bottom: 2px solid #6200ea;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.new-comment {
+  margin: 15px 0;
+}
+
+.author-detail {
+  padding-top: 5px;
+  padding-bottom: 10px;
+  color: #333333;
+}
+
+.content-detail, .img-detail {
+  padding: 20px 0;
+  margin: 0;
+}
+
+.img-detail {
+  display: flex;
+}
+
+.img-detail-src {
+  margin: auto;
+  width: 95%;
+}
+
+#comment-textarea {
+  width: 88%;
+  min-height: 72px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+#comment-btn {
+  float: right;
+  border-radius: 25px;
+  background: #6200ea;
+  border: none;
+  color: white;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+#comment-btn:hover {
+  background: #3700b3;
+}
+
+.comment-author {
+  font-size: 14px;
+  color: #333333;
+}
+
+#content-textarea {
+  width: 100%;
+  height: 180px;
+  margin: 20px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.button-group {
+  text-align: center; /* 중앙 정렬을 위해 text-align 사용 */
+}
+
+.edit-content {
+  border-top: 2px solid #6200ea !important;
+  border-bottom: 2px solid #6200ea !important;
+  padding: 20px !important;
+  background-color: #ffffff !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  width: 90% !important;
+  max-width: 800px !important;
+  margin: auto !important; /* 수평 중앙 정렬을 위해 auto 사용 */
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+#twit-update, #twit-cancel {
+  float: right;
+  border-radius: 25px;
+  background: #6200ea;
+  border: none;
+  color: white;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+#twit-update:hover, #twit-cancel:hover {
+  background: #3700b3;
+}
+
+#twit-cancel {
+  margin-left: 20px;
+}
+
+#img-label-dlt {
+  margin-left: 20px;
+  color: #6200ea;
+}
+
+.suggestion {
+  text-align: left;
+  padding: 20px;
+  margin-top: 25px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.suggested {
+  display: inline-block;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.suggested-user {
+  float: left;
+  width: 70%;
+  padding-right: 5px;
+}
+
+.suggested-name {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333333;
+}
+
+.suggested-info {
+  color: gray;
+  font-size: 13px;
+  margin-top: 1px;
+}
+
+.suggested-follow {
+  cursor: pointer;
+  border-radius: 15px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.7em;
+  text-transform: uppercase;
+  background-color: #6200ea;
+  padding: 5px 10px;
+  float: right;
+  margin-top: 14px;
+  text-align: center;
+}
+
+.btn.btn-info {
+  border-color: #7b3ed0; /* 원하는 테두리 색으로 변경 */
+  background-color: #8f62cd; /* 기본 배경색 */
+  color: white !important;
+}
+
+.btn.btn-info:hover {
+  background-color: #7b3ed0; /* 호버 시 배경색 변경 */
+  border-color: #7b3ed0; /* 호버 시 테두리 색 변경 */
+}
+
+.btn.btn-fill.btn-info {
+  background-color: #9269cc; /* 기본 배경색 */
+  border-color: #8f62cd; /* 기본 테두리 색 */
+  color: white; /* 텍스트 색상 */
+}
+
+.btn.btn-fill.btn-info:hover {
+  background-color: #7b3ed0; /* 호버 시 배경색 */
+  border-color: #8f62cd; /* 호버 시 테두리 색 */
+}
+
+
+
+
+
+
+
+
+/* 프로필 페이지의 My Post와 Likes 섹션 게시물 관련 CSS */
+.profile-tabs .profile-twit-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 20px !important;
+  justify-content: space-between !important;
+}
+
+.profile-tabs .profile-twit {
+  border: 0 !important;
+  border-left: 4px solid #6200ea !important;
+  padding: 20px !important;
+  position: relative !important;
+  margin-bottom: 20px !important;
+  background-color: #ffffff !important;
+  border-radius: 15px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  width: calc(50% - 10px) !important; /* 두 개의 게시물이 한 줄에 오도록 */
+  box-sizing: border-box !important;
+}
+
+.profile-tabs .profile-twit-content {
+  margin: 12px 0 !important;
+  color: #333333 !important;
+}
+
+.profile-tabs .profile-twit-author {
+  display: inline-block !important;
+  font-weight: bold !important;
+  margin-right: 10px !important;
+  color: #6200ea !important;
+}
+
+.profile-tabs .profile-twit-follow, .profile-tabs .profile-twit-unfollow {
+  cursor: pointer !important;
+  border-radius: 15px !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+  font-size: 0.8em !important;
+  text-transform: uppercase !important;
+  background-color: #6200ea !important;
+  padding: 5px 10px !important;
+  float: right !important;
+}
+
+.profile-tabs .profile-twit-like, .profile-tabs .profile-twit-unlike, .profile-tabs .profile-twit-share {
+  background-color: transparent !important;
+  border: 0 !important;
+  color: #6200ea !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+}
+
+.profile-tabs .profile-twit-share {
+  height: 20px !important;
+}
+
+.profile-tabs .profile-twit-edit {
+  margin-right: 15px !important;
+}
+
+.profile-tabs .profile-twit-delete, .profile-tabs .profile-twit-edit {
+  float: right !important;
+  font-size: 18px !important;
+  padding-top: 5px !important;
+  border: none !important;
+  background-color: transparent !important;
+  font-weight: 500 !important;
+  color: #333333 !important;
+}
+
+.profile-tabs .profile-twit-delete:hover, .profile-tabs .profile-twit-edit:hover {
+  color: #03dac6 !important;
+}
+
+.profile-tabs .profile-twit-img {
+  text-align: center !important;
+  margin-top: 15px !important; /* 이미지와 텍스트 간격 조정 */
+}
+
+.profile-tabs .profile-twit-img img {
+  max-width: 100% !important;
+  border-radius: 10px !important; /* 이미지의 모서리를 둥글게 */
+}
+
+
+
+
+
+
+
+
+/* 게시물과 댓글 작성 영역을 나란히 배치하는 CSS */
+.detail-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 20px !important;
+  justify-content: right !important; 
+  align-items: flex-start !important;
+  margin: 10px auto !important;
+  max-width: 1200px !important; /* 최대 너비를 넓게 설정 */
+  padding: 0 20px !important; /* 좌우 패딩 추가 */
+}
+
+.post-container {
+  flex: 2 !important;
+  max-width: 800px !important; /* 최대 너비를 넓게 설정 */
+  min-width: 600px !important; /* 최소 너비를 설정 */
+  width: 100% !important;
+  margin-right: 10px !important; /* 오른쪽 여백 추가 */
+}
+
+.comment-container {
+  flex: 1 !important;
+  max-width: 400px !important; /* 최대 너비를 넓게 설정 */
+  min-width: 500px !important; /* 최소 너비를 설정 */
+  width: 100% !important;
+  margin-left: 20px !important; /* 왼쪽 여백 추가 */
+}
+
+.profile-twit {
+  border: 0 !important;
+  border-left: 4px solid #6200ea !important;
+  padding: 20px !important;
+  background-color: #ffffff !important;
+  border-radius: 15px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  width: 100% !important;
+  box-sizing: border-box !important; /* 박스 크기 조정을 위해 설정 */
+}
+
+.profile-twit-author {
+  font-weight: bold !important;
+  color: #6200ea !important;
+  margin-bottom: 10px !important;
+}
+
+.profile-twit-content {
+  margin-bottom: 20px !important;
+  color: #333 !important;
+}
+
+.profile-twit-img img {
+  max-width: 100% !important;
+  border-radius: 10px !important;
+}
+
+#comment-form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  background-color: #ffffff !important;
+  border-radius: 15px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  padding: 10px !important;
+  box-sizing: border-box !important; /* 박스 크기 조정을 위해 설정 */
+}
+
+#comment-textarea {
+  width: 100% !important;
+  height: 100px !important;
+  border-radius: 5px !important;
+  border: 1px solid #ccc !important;
+  padding: 10px !important;
+  font-size: 14px !important;
+}
+
+#comment-btn {
+  align-self: flex-end !important;
+  background: #6200ea !important;
+  border: none !important;
+  color: white !important;
+  height: 40px !important;
+  width: 40px !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#comment-btn i {
+  font-size: 18px !important;
+}
+
+.comments {
+  margin-top: 20px !important;
+}
+
+.comments h5 {
+  margin: 0 0 10px 0 !important; /* 여백 조정 */
+}
+
+.comment-list {
+  margin-bottom: 20px !important;
+}
+
+.comment-list .twit-author {
+  font-weight: bold !important;
+  color: #6200ea !important;
+}
+
+.comment-list .comment-content {
+  margin-top: 5px !important;
+}
+
+/* 미디어 쿼리: 작은 화면에서 레이아웃 조정 */
+@media (max-width: 1024px) {
+  .detail-container {
+    flex-direction: column !important;
+    padding: 0 10px !important;
+  }
+
+  .post-container,
+  .comment-container {
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+}
