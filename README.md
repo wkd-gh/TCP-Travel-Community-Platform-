@@ -6,7 +6,7 @@ TCP는 여행자들이 정보를 공유하고 커뮤니티를 형성할 수 있�
 
 **[🎥 Demo video](https://www.veed.io/view/20819837-6974-4de9-884a-97f01aa55ac1?panel=share)** 
 
-**[🎬 Demo video (kakao share)](https://www.veed.io/view/20819837-6974-4de9-884a-97f01aa55ac1?panel=share)** 
+**[🎬 Demo video (kakao share)](https://github.com/wkd-gh/TCP-Travel-Community-Platform-/blob/main/Demo%20video_kakao%20share.mp4)** 
 
 ---
 
